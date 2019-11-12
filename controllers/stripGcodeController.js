@@ -29,10 +29,15 @@ exports.gcodeController = (req, res) => {
     const layerHeight = getLayerHeight(); 
     
     let isOnFirstLayer = true; 
+    let lastFeedrateChange = false; 
 
     fs.readFileSync(pathToGcode + fileName, 'utf-8').split(/\r?\n/).forEach(function(line){
         const splitCode = line.split(" "); 
         const splitComment = line.split(" ; "); 
+
+        if(splitCode.length > 1 && splitCode[1].includes(gcode.FeedRate)) {
+            lastFeedrateChange = true; 
+        }
 
         if(isOnFirstLayer) {
             if(splitComment.length > 1 && splitComment[1].includes("restore layer Z")) {
@@ -58,8 +63,14 @@ exports.gcodeController = (req, res) => {
                                 case gcode.Perimeter: 
                                     perimeterPoints.push({
                                         x: splitCode[1].substring(1, splitCode[1].length),
-                                        y: splitCode[2].substring(1, splitCode[2].length) 
+                                        y: splitCode[2].substring(1, splitCode[2].length),
+                                        newPolygon: lastFeedrateChange,
                                     })
+
+                                    if(lastFeedrateChange) {
+                                        lastFeedrateChange = false; 
+                                    }
+
                                 break;
 
                                 case gcode.Infill: 
@@ -80,8 +91,27 @@ exports.gcodeController = (req, res) => {
         }
       })
 
+      let polygons = [[]];
+      let polygonIndex = 0; 
+
+      for(let i = 0; i < perimeterPoints.length; i++) {
+
+        if(i > 0 && perimeterPoints[i].newPolygon) {
+            polygonIndex++; 
+            polygons[polygonIndex] = new Array(); 
+        }
+          polygons[polygonIndex].push({
+              polygon: polygonIndex,
+              points: perimeterPoints[i]});
+      }
+
       res.json({
-          numPoints: perimeterPoints.length,
-          points: perimeterPoints
-      }); 
+          numPolygons: polygons.length,
+          polygons: polygons
+      })
+
+    //   res.json({
+    //       numPoints: perimeterPoints.length,
+    //       points: perimeterPoints
+    //   }); 
 }
