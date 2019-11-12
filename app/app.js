@@ -3,8 +3,14 @@
 class App {
     constructor() {
         //Setup
+
+        this.bedSize = {
+            x: 250,
+            y: 210
+        }
+
         this.scene = new THREE.Scene(); 
-        this.camera = new THREE.OrthographicCamera(window.innerWidth / - 6, window.innerWidth / 6,window.innerHeight / 6, window.innerHeight / - 6, -200,500); 
+        this.camera = new THREE.OrthographicCamera(window.innerWidth / - 6, window.innerWidth / 6,window.innerHeight / 6, window.innerHeight / - 6, -200,5000); 
         this.canvas = document.getElementById("canvas"); 
         
         this.renderer = new THREE.WebGLRenderer({
@@ -25,8 +31,6 @@ class App {
         var cube = new THREE.Mesh(geometry, material); 
 
         cube.position.set(0,2.5,0); 
-        cube.castShadow=true; 
-        cube.receiveShadow=false; 
 
         this.scene.add(grid); 
         //this.scene.add(cube); 
@@ -38,8 +42,6 @@ class App {
         this.scene.add(spotLight);  
 
         this.camera.lookAt(cube.position); 
-        console.log(this.scene.position); 
-        console.log(cube.position); 
 
         this.fetchGcode(); 
         this.render(); 
@@ -50,7 +52,7 @@ class App {
         fetch("http://localhost:8080/api/getStrippedGcode").then((res)=>{
             return res.json(); 
         }).then((data) => {
-            this.drawGcode(data); 
+            this.drawPolygons(data); 
         })
     }
 
@@ -78,6 +80,37 @@ class App {
         this.scene.add(line);
 
     }
+    
+    drawPolygons(gcode) {
+
+        let polygons = gcode.polygons; 
+
+        let numPoints = 0; 
+        for(let i = 0; i < polygons.length; i++) {
+        let points = polygons[i];
+
+        var material = new THREE.LineBasicMaterial( {
+            color: 0x0000ff, 
+            linewidth: 1000
+        } );
+
+
+        var geometry = new THREE.Geometry(); 
+
+        points.forEach(p => {
+            numPoints++; 
+            geometry.vertices.push(new THREE.Vector3(p.point.x-(this.bedSize.x/2), 0, p.point.y-(this.bedSize.y/2))); 
+        }); 
+
+        var line = new THREE.Line(geometry, material); 
+
+        this.scene.add(line);
+    }
+
+    console.log(numPoints); 
+
+
+    }
 
     getCenter(mesh) {
         var middle = new THREE.Vector3();
@@ -98,6 +131,5 @@ class App {
         window.requestAnimationFrame(this.render.bind(this)); 
     }
 }
-
 
 var app = new App(); 

@@ -102,7 +102,7 @@ exports.gcodeController = (req, res) => {
         }
           polygons[polygonIndex].push({
               polygon: polygonIndex,
-              points: perimeterPoints[i]});
+              point: perimeterPoints[i]});
       }
 
       res.json({
