@@ -32,7 +32,7 @@ class App {
 
         cube.position.set(0,2.5,0); 
 
-        this.scene.add(grid); 
+        //this.scene.add(grid); 
         //this.scene.add(cube); 
 
         var ambientLight = new THREE.AmbientLight(0x0c0c0c);
