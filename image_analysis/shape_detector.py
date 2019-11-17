@@ -22,6 +22,6 @@ class ShapeDetector:
             shape="pentagon"
 
         else:
-            shape="Circle"
+            shape="circle"
 
         return shape

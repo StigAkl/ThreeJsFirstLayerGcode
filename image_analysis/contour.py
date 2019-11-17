@@ -32,7 +32,7 @@ if circles is not None:
         cv2.imshow("output", np.hstack([img, output]))
         cv2.waitKey(0)
 
-print("Circles: ", num_circles)
+    print("Circles: ", num_circles)
 # cv2.imshow("Image", blurred)
 # cv2.waitKey(0)
 
