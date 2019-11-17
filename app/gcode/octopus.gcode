@@ -7143,3 +7143,10 @@ G1 X160.585 Y140.373 E0.00487 ; infill
 G1 X161.091 Y140.624 E0.01827 ; infill
 G1 X161.198 Y140.649 E0.00358 ; infill
 G1 X164.007 Y143.458 E0.12852 ; infill
+
+
+
+; first_layer_height = 0.3
+; infill_only_where_needed = 0
+; interface_shells = 0
+; layer_height = 0.2

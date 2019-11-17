@@ -52,8 +52,14 @@ class App {
         fetch("http://localhost:8080/api/getStrippedGcode").then((res)=>{
             return res.json(); 
         }).then((data) => {
-            this.drawPolygons(data); 
+            this.drawPolygons(data);
+            this.setSlider(data);  
         })
+    }
+
+    setSlider(data) {
+        numLayers = data.numLayers;
+        document.getElementById("setLayer").max = data.numLayers; 
     }
 
      drawGcode(gcode) {
