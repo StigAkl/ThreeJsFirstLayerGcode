@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const port = process.env.PORT || 8080;
-const { gcodeController } = require("./controllers/stripGcodeControllerNoComment");  
+const { gcodeController } = require("./controllers/stripGcodeController");  
 
 app.listen(port, (req) => {
     console.log("Listening on port " + port); 

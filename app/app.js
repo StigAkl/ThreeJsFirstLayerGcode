@@ -43,6 +43,14 @@ class App {
 
         this.camera.lookAt(cube.position); 
 
+        document.getElementById("reset").addEventListener("click", () => {
+            console.log("removing"); 
+            while(this.scene.children.length > 0) {
+                this.scene.remove(this.scene.children[0]); 
+                this.fetchGcode(); 
+            }
+        });
+
         this.fetchGcode(); 
         this.render(); 
     }
@@ -93,24 +101,28 @@ class App {
 
         let numPoints = 0; 
         for(let i = 0; i < polygons.length; i++) {
-        let points = polygons[i];
 
-        var material = new THREE.LineBasicMaterial( {
-            color: 0x0000ff, 
-            linewidth: 1000
-        } );
+            if(i % 30 !== 0) {
+                let points = polygons[i];
+
+                var material = new THREE.LineBasicMaterial( {
+                    color: 0x0000ff, 
+                    linewidth: 1000
+                } );
 
 
-        var geometry = new THREE.Geometry(); 
+                var geometry = new THREE.Geometry(); 
 
-        points.forEach(p => {
-            numPoints++; 
-            geometry.vertices.push(new THREE.Vector3(p.point.x-(this.bedSize.x/2), 0, p.point.y-(this.bedSize.y/2))); 
-        }); 
+                let t = 0; 
+                points.forEach(p => {
+                    numPoints++; 
+                    geometry.vertices.push(new THREE.Vector3(p.point.x-(this.bedSize.x/2), 0, p.point.y-(this.bedSize.y/2))); 
+                }); 
 
-        var line = new THREE.Line(geometry, material); 
+                var line = new THREE.Line(geometry, material); 
 
-        this.scene.add(line);
+                this.scene.add(line);
+        }
     }
 
     console.log(numPoints); 
