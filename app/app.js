@@ -66,8 +66,8 @@ class App {
     }
 
     setSlider(data) {
-        numLayers = data.numLayers;
-        document.getElementById("setLayer").max = data.numLayers; 
+        //numLayers = data.numLayers;
+        //document.getElementById("setLayer").max = data.numLayers; 
     }
 
      drawGcode(gcode) {
@@ -102,7 +102,8 @@ class App {
         let numPoints = 0; 
         for(let i = 0; i < polygons.length; i++) {
 
-            if(i % 30 !== 0) {
+            //Simulate errors
+            if(i % 10 !== 0) {
                 let points = polygons[i];
 
                 var material = new THREE.LineBasicMaterial( {
