@@ -55,13 +55,13 @@ res_read = cv2.imread("res.jpg", cv2.IMREAD_GRAYSCALE)
 cv2.imshow("Resread", res_read)
 # Apply cv2.threshold() to get a binary image
 kernel = np.ones((5,5),np.float32)/25
-thresh = cv2.threshold(res_read, 20 ,255, cv2.THRESH_BINARY_INV)[1]
+thresh = cv2.threshold(res, 20 ,255, cv2.THRESH_BINARY_INV)[1]
 
 #Add blur
 blur_thresh = cv2.filter2D(thresh, -1, kernel)
 
 # Find contours:
-cnts = cv2.findContours(blur_thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+cnts = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 cnts = cnts[0] if len(cnts) == 2 else cnts[1]
 
 
@@ -80,6 +80,7 @@ while i < len(cnts):
         valid_cnts.append(c)
     i += 1
 
+print(thresh)
 cv2.imshow("Mask", mask)
 cv2.imshow("Img", blank_image)
 
