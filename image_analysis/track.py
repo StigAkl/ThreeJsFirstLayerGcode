@@ -5,7 +5,7 @@ import numpy as np
 def nothing(x):
     pass
 
-useCamera=True
+useCamera=False
 
 # Check if filename is passed
 if (len(sys.argv) <= 1) :
