@@ -69,8 +69,6 @@ def detect_filament_from_roi(reg):
     contours = cv2.findContours(mask_blurred, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     contours = contours[0] if len(contours) == 2 else contours[1]
 
-    print(len(contours))
-
     cv2.imshow("Original Image", orig_roi)
     cv2.drawContours(blank_image,contours, -1, (255,0,0), 1)
     cv2.imshow("Contour", blank_image)
