@@ -55,33 +55,26 @@ res_read = cv2.imread("res.jpg", cv2.IMREAD_GRAYSCALE)
 cv2.imshow("Resread", res_read)
 # Apply cv2.threshold() to get a binary image
 kernel = np.ones((5,5),np.float32)/25
-thresh = cv2.threshold(res, 20 ,255, cv2.THRESH_BINARY_INV)[1]
+thresh = cv2.threshold(res, 10 ,255, cv2.THRESH_BINARY_INV)[1]
 
 #Add blur
-blur_thresh = cv2.filter2D(thresh, -1, kernel)
+blur_thresh = cv2.filter2D(mask, -1, kernel)
 
 # Find contours:
-cnts = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+cnts = cv2.findContours(blur_thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 cnts = cnts[0] if len(cnts) == 2 else cnts[1]
 
 
 #Create blank image
 blank_image = np.zeros((height,width,3), np.uint8)
-blank_image[0:height, 0:width] = 255
+blank_image[0:height, 0:width] = 0
 
-valid_cnts = []
-i = 1
-while i < len(cnts):
-    c = cnts[i]
-    area = cv2.contourArea(c)
+cv2.drawContours(green,cnts, -1, (0,0,255), 1)
+cv2.drawContours(blank_image,cnts, -1, (0,0,255), 1)
 
-    if area > 25:
-        cv2.drawContours(blank_image,[c], 0, (255,0,0), 1)
-        valid_cnts.append(c)
-    i += 1
 
 print(thresh)
-cv2.imshow("Mask", mask)
-cv2.imshow("Img", blank_image)
+cv2.imshow("Blank", blank_image)
+cv2.imshow("Img", green)
 
 cv2.waitKey(0)
