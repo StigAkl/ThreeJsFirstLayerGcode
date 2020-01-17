@@ -14,7 +14,7 @@ if (len(sys.argv) <= 1) :
 
 # Create a window
 cv2.namedWindow('image', cv2.WINDOW_NORMAL)
-cv2.resizeWindow('image', 800,400)
+cv2.resizeWindow('image', 1000,1000)
 
 # create trackbars for color change
 cv2.createTrackbar('HMin','image',0,179,nothing) # Hue is from 0-179 for Opencv

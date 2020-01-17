@@ -24,15 +24,21 @@ class App {
         this.renderer.setSize(window.innerWidth,window.innerHeight); 
         document.body.appendChild(this.renderer.domElement); 
 
-
-        var grid = new THREE.GridHelper(500,50);  
+ 
         var geometry = new THREE.BoxGeometry(10,10,10); 
-        var material = new THREE.MeshBasicMaterial( {color: 0x3c9993} );
-        var cube = new THREE.Mesh(geometry, material); 
+        var material = new THREE.MeshBasicMaterial( {color: 0x000000, wireframe: true} );
+        this.cube = new THREE.Mesh(geometry, material); 
 
-        cube.position.set(0,2.5,0); 
 
-        //this.scene.add(grid); 
+        this.pgeometry = new THREE.PlaneGeometry( 500, 500, 32 );
+        this.pmaterial = new THREE.MeshBasicMaterial( {color: 0x000000, side: THREE.DoubleSide} );
+        this.plane = new THREE.Mesh( this.pgeometry, this.pmaterial );
+        
+        this.camera.position.set(0,0.3,1)
+        
+        this.camera.lookAt(this.cube.position)
+        //this.scene.add(this.plane)
+    
         //this.scene.add(cube); 
 
         var ambientLight = new THREE.AmbientLight(0x0c0c0c);
@@ -40,8 +46,6 @@ class App {
 
         var spotLight = new THREE.SpotLight( 0xffffff );
         this.scene.add(spotLight);  
-
-        this.camera.lookAt(cube.position); 
 
         document.getElementById("reset").addEventListener("click", () => {
             console.log("removing"); 
@@ -78,12 +82,14 @@ class App {
         } );        
         var geometry = new THREE.Geometry(); 
 
-        if(gcode.numPoints > 0) {
-            const points = gcode.points; 
+        for(let i = 0; i < 10; i++) {
+            if(gcode.numPoints > 0) {
+                const points = gcode.points; 
 
-            points.forEach(p => {
-                geometry.vertices.push(new THREE.Vector3(p.x, 0, p.y)); 
-            }); 
+                points.forEach(p => {
+                    geometry.vertices.push(new THREE.Vector3(p.x, i, p.y)); 
+                }); 
+            }
         }
 
         var line = new THREE.Line(geometry, material); 
@@ -100,31 +106,34 @@ class App {
         let polygons = gcode.polygons; 
 
         let numPoints = 0; 
-        for(let i = 0; i < polygons.length; i++) {
+        for(let j = 0; j < 10; j++) {
+            for(let i = 0; i < polygons.length; i++) {
 
-            //Simulate errors
-            if(i % 10 !== 0) {
-                let points = polygons[i];
+                //Simulate errors
+                //if(i % 10 !== 0) {
+                if(true) {
+                    let points = polygons[i];
 
-                var material = new THREE.LineBasicMaterial( {
-                    color: 0x0000ff, 
-                    linewidth: 1000
-                } );
+                    var material = new THREE.LineBasicMaterial( {
+                        color: 0x0000ff, 
+                        linewidth: 1000
+                    } );
 
 
-                var geometry = new THREE.Geometry(); 
+                    var geometry = new THREE.Geometry(); 
 
-                let t = 0; 
-                points.forEach(p => {
-                    numPoints++; 
-                    geometry.vertices.push(new THREE.Vector3(p.point.x-(this.bedSize.x/2), 0, p.point.y-(this.bedSize.y/2))); 
-                }); 
+                    let t = 0; 
+                    points.forEach(p => {
+                        numPoints++; 
+                        geometry.vertices.push(new THREE.Vector3(p.point.x-(this.bedSize.x/2), (j/2), p.point.y-(this.bedSize.y/2))); 
+                    }); 
 
-                var line = new THREE.Line(geometry, material); 
+                    var line = new THREE.Line(geometry, material); 
 
-                this.scene.add(line);
+                    this.scene.add(line);
+                }
+            }
         }
-    }
 
     console.log(numPoints); 
 
@@ -145,8 +154,8 @@ class App {
     }
 
     render() {
+        this.camera.lookAt(this.cube.position)
         this.renderer.render(this.scene, this.camera); 
-
         window.requestAnimationFrame(this.render.bind(this)); 
     }
 }

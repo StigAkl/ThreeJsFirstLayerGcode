@@ -1255,6 +1255,9 @@ G1 X94.788 Y135.797 ; move to first perimeter point
 G1 Z0.200 ; restore layer Z
 G1 E0.80000 F2100.00000 ; unretract
 G1 F1200
+
+G28
+M226
 G1 X94.595 Y136.025 E0.00936 ; perimeter
 G1 X94.444 Y136.294 E0.00967 ; perimeter
 G1 X94.345 Y136.589 E0.00977 ; perimeter

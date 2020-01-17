@@ -1,0 +1,6 @@
+{
+    "filename": "multi_joint.gcode",
+    "startLayer": 1,
+    "numLayers": 4,
+    "features": ["contours"]
+}
