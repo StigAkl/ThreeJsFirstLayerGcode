@@ -1,6 +1,6 @@
 module.exports = {
     LinearMovement: "G1",
     "Perimeter": "perimeter",
-    "Infill" : "infill"
-    
+    "Infill" : "infill",
+    FeedRate: "F8640"
 }
